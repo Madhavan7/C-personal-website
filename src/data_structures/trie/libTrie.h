@@ -14,3 +14,9 @@ struct TrieNode{
   DictEntry * characters;
   int endOfWord; 
 };
+
+TrieNode *initTrieNode();
+void insert(char * word, TrieNode *trie);
+int search(char *word, TrieNode *trie);
+void delete(char *word, TrieNode *trie);
+void freeTrieNode(TrieNode * trie);
