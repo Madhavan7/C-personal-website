@@ -13,10 +13,11 @@ TrieNode *initTrieNode(){
   trie->char_capacity = 5;
   trie->char_len = 0;
   trie->endOfWord = 0;
+  trie->value = NULL;
   return trie;
 }
 /*below inserts the word into the trie node, assuming its a null terminated string*/
-void insert(char * word, TrieNode *trie){
+void insert(char * word, TrieNode *trie, void *value){
   /*dont want to insert empty string*/
   if(*word == '\0'){
     return;
@@ -42,18 +43,20 @@ void insert(char * word, TrieNode *trie){
     }
     i++;
   }
+  trie->value = value;
   trie->endOfWord = 1;
 }
 
-int search(char *word, TrieNode *trie){
+/*Helper function we use to avoid repeating code*/
+TrieNode *searchHelper(char *word, TrieNode *trie){
   if(*word == '\0'){
-    return 0;
+    return NULL;
   }
   int i = 0;
   while(*(word + i)!='\0'){
     for(int j = 0; j < trie->char_len + 1; j ++){
       if(j == trie->char_len){
-        return 0;
+        return NULL;
       }else if(*(word + i) == trie->characters[j].key){
         trie = trie->characters[j].trie;
         break;
@@ -61,8 +64,27 @@ int search(char *word, TrieNode *trie){
     }
     i++;
   }
+  return trie;
+}
+
+/*checks if word is in the Trie dictionary*/
+int search(char *word, TrieNode *trie){
+  trie = searchHelper(word, trie);
+  if(trie == NULL){
+    return 0;
+  }
   return trie->endOfWord;
 }
+
+/*gets the value of the key, word*/
+void *get(char *word, TrieNode *trie){
+  trie = searchHelper(word, trie);
+  if(trie == NULL||!trie->endOfWord){
+    return NULL;
+  }
+  return trie->value;
+}
+
 /*I am probably not going to use delete much, so I may leave this unimplemented*/
 void delete(char *word, TrieNode *trie){
 

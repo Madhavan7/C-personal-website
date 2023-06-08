@@ -12,11 +12,14 @@ struct TrieNode{
   int char_len;
   int char_capacity;
   DictEntry * characters;
+  void *value;
   int endOfWord; 
 };
 
 TrieNode *initTrieNode();
-void insert(char * word, TrieNode *trie);
+void insert(char * word, TrieNode *trie, void *value);
+TrieNode *searchHelper(char *word, TrieNode *trie);
 int search(char *word, TrieNode *trie);
+void *get(char *word, TrieNode *trie);
 void delete(char *word, TrieNode *trie);
 void freeTrieNode(TrieNode * trie);
